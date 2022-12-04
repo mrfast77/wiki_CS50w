@@ -9,8 +9,10 @@
     <div class="search-anchors">
         {% for entry in entries %}
         <div>
-            <a href="{% url 'encyclopedia:title' entry=entry %}">{{ entry }}</a>
+            <a href="{% url 'encyclopedia:title' entry=entry %}">{{ entry|safe }}</a>
         </div>
+        {% empty %}
+            <h4>{{ message }}</h4>
         {% endfor %}
     </div>
 {% endblock %}

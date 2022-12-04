@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    {% for entry in entry %}
-        {{ entry }}
-    {% endfor %}
+    
+    {{ entry|safe }}
+    
 {% endblock %}
