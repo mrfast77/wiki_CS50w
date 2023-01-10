@@ -10,16 +10,44 @@ def convert_to_html(title):
         return None
     return markdowner.convert(content)
 
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
 
+def add(request):
+
+    if request.method == "POST":
+
+        title = request.POST.get('title')
+        new_entry = request.POST.get('new_entry')
+        existing_entries = util.list_entries()
+
+        # error_message = "This title already exists. Please select a new title"
+        for entry in existing_entries:
+            if title.lower() == entry.lower():
+                return render(request, "encyclopedia/add.html", {
+                    "message": "This title already exists. Please select a new title"
+                })
+
+        markdowner = Markdown()
+        new_converted_entry = markdowner.convert(new_entry)
+
+        util.save_entry(title, new_converted_entry)
+
+        return render(request, "encyclopedia/new.html", {
+            "title": title,
+            "new_entry": new_converted_entry
+            })
+    
+    return render(request, "encyclopedia/add.html")
+
 
 def search_view(request):
-    query_dict = request.GET
-    query = query_dict.get("q")
+    query = request.GET.get("q")
     entries_list = util.list_entries()
+
     searched_entries = []
 
     message = "No results found"
@@ -33,14 +61,11 @@ def search_view(request):
 
         if query.lower() in entry.lower():
             searched_entries.append(entry)
-        
-        else:
-            return render(request, "encyclopedia/search.html", {
-            "message": message
-            })
 
+       
     return render(request, "encyclopedia/search.html", {
-    "entries": searched_entries
+    "entries": searched_entries,
+    "message": message
     })
          
 
@@ -52,3 +77,4 @@ def title(request, entry):
         "entry": convert_to_html(entry),
         "title": title
     })
+

@@ -1,0 +1,21 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% load static %}
+
+{% block title %}
+    Create New Page
+{% endblock %}
+
+{% block body %}
+    {% if message %}
+        <script>
+            alert('{{ message }}');
+        </script>
+    {% endif %}
+    <form action="{% url 'encyclopedia:add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" placeholder="Title" name="title">
+        <textarea rows="4" cols="50" name="new_entry" placeholder="Enter Markdown content here"></textarea>
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

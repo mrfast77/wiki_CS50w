@@ -13,7 +13,7 @@ h1 {
 }
 
 textarea {
-    height: 90vh;
+    height: 80vh;
     width: 80%;
 }
 
@@ -41,3 +41,8 @@ textarea {
     display: flex;
     flex-direction: column;
 }
+
+#error {
+    background-color: indianred;
+}
+
