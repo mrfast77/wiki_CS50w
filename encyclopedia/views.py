@@ -24,7 +24,6 @@ def add(request):
         new_entry = request.POST.get('new_entry')
         existing_entries = util.list_entries()
 
-        # error_message = "This title already exists. Please select a new title"
         for entry in existing_entries:
             if title.lower() == entry.lower():
                 return render(request, "encyclopedia/add.html", {
@@ -72,9 +71,29 @@ def search_view(request):
 def title(request, entry):
     if util.get_entry(entry) == None:
         return render(request, "encyclopedia/error.html")
-
+    
     return render(request, "encyclopedia/title.html", {
         "entry": convert_to_html(entry),
-        "title": title
+        "title": entry
     })
+
+
+def edit(request):
+    if request.method == 'POST':
+        title = request.POST["title"]
+        content = util.get_entry(title)
+    return render(request, "encyclopedia/edit.html", {
+        "title": title,
+        "content": content
+    })
+
+def save(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        content = request.POST['content']
+        util.save_entry(title, content)
+        return render(request, "encyclopedia/title.html", {
+            "title": title,
+            "entry": convert_to_html(title)
+        })
 
