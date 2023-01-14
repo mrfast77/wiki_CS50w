@@ -2,6 +2,7 @@ from django.shortcuts import render
 from re import search
 from . import util
 from markdown2 import Markdown
+import random
 
 def convert_to_html(title):
     content = util.get_entry(title)
@@ -96,4 +97,14 @@ def save(request):
             "title": title,
             "entry": convert_to_html(title)
         })
+
+
+def rand(request):
+    entries = util.list_entries()
+    rand_int = random.randint(0, (len(entries)-1))
+    random_entry = entries[rand_int]
+    return render(request, "encyclopedia/title.html", {
+        "title": random_entry,
+        "entry": convert_to_html(random_entry)
+    })
 
